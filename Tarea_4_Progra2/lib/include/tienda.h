@@ -9,14 +9,13 @@ namespace Tarea3
 {
 class Tienda {
 
-    std::vector<Producto *> productos;
-
     char nombretienda[15];
     char direccionInternet[24]; 
     char direccionFisica[24]; 
     char telefono[8]; 
 
     public:
+    std::vector<Producto *> productos;
     Tienda(std::string nombretienda,std::string direccionInternet,std::string direccionFisica,std::string telefono);
     Tienda();
     ~Tienda();

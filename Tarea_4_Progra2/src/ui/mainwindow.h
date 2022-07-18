@@ -23,6 +23,14 @@ private slots:
 
     void on_BotonGuardarTienda_clicked();
 
+    void on_BotonModificar_clicked();
+
+    void on_BotonEliminar_clicked();
+
+    void on_BotonGuardarStream_clicked();
+
+    void on_BotonCargarStream_clicked();
+
 private:
     Ui::MainWindow *ui;
     Tarea3::Tienda *tienda;
