@@ -29,47 +29,74 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget">
+  <widget class="QLineEdit" name="lineExistenciaAgregar">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>150</y>
+     <width>281</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelExistencia">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>150</y>
+     <width>69</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Existencia</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelNombreProducto">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>10</y>
-     <width>351</width>
-     <height>221</height>
+     <y>90</y>
+     <width>56</width>
+     <height>25</height>
     </rect>
    </property>
-   <layout class="QFormLayout" name="formLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="labelID">
-      <property name="text">
-       <string>ID</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineIdAgregar"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="labelNombreProducto">
-      <property name="text">
-       <string>Nombre</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineNombreAgregar"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="labelExistencia">
-      <property name="text">
-       <string>Existencia</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="lineExistenciaAgregar"/>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Nombre</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineNombreAgregar">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>90</y>
+     <width>281</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelID">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>30</y>
+     <width>15</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ID</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineIdAgregar">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>30</y>
+     <width>281</width>
+     <height>25</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

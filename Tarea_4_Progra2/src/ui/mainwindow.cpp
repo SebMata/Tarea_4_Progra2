@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "./../../lib/include/producto.h"
 #include "./../../lib/include/tienda.h"
+#include "./../../lib/include/ExcepcionProductoNoExiste.h"
 #include "addproduct.h"
 #include "modifyproduct.h"
 #include "deleteproduct.h"
@@ -30,6 +31,26 @@ void MainWindow::on_BotonAgregar_clicked()
     addProduct addProduct(this);
         int result = addProduct.exec();
         if (result == QDialog::Accepted) {
+            bool ok = false;
+            if (addProduct.ObtenerID()==0)
+                {
+                    ok = true;
+                }
+            if (QString::fromStdString(addProduct.ObtenerNombre()).isEmpty())
+                {
+                    ok = true;
+                }
+            if (addProduct.ObtenerExistencia()==0)
+                {
+                    ok = true;
+                }
+            if(ok){
+                QMessageBox* msgbox = new QMessageBox(this);
+                msgbox->setWindowTitle("Título del diálogo");
+                msgbox->setText("Falta información");
+                msgbox->open();
+                return;
+            }
             Tarea3::Producto *producto = new Tarea3::Producto(addProduct.ObtenerID(),addProduct.ObtenerNombre(),addProduct.ObtenerExistencia());
             tienda->AgregarProducto(producto);
             QString productoLista = (QString::number(addProduct.ObtenerID())+" "+QString::fromStdString(addProduct.ObtenerNombre())+" "+QString::number(addProduct.ObtenerExistencia()));
@@ -89,21 +110,61 @@ void MainWindow::on_BotonGuardarTienda_clicked()
 
 void MainWindow::on_BotonModificar_clicked()
 {
+    try{
     modifyProduct modifyProduct(this);
         int result = modifyProduct.exec();
-        if (result == QDialog::Accepted) {
-            tienda->ModificarProductoTienda(modifyProduct.ObtenerID(),modifyProduct.ObtenerNombre(),modifyProduct.ObtenerExistencia());
-            QString productoLista = (QString::number(modifyProduct.ObtenerID())+" "+QString::fromStdString(modifyProduct.ObtenerNombre())+" "+QString::number(modifyProduct.ObtenerExistencia()));
-                QList<QListWidgetItem *> list = ui->listaEditable->findItems(QString::fromStdString(modifyProduct.ObtenerNombrePorCambiar()), Qt::MatchContains);
-                for ( QListWidgetItem *item : list ){
-                    item->setText(productoLista);
+            if (result == QDialog::Accepted) {
+                bool ok = false;
+                if (modifyProduct.ObtenerID()==0)
+                    {
+                        ok = true;
+                    }
+                if (QString::fromStdString(modifyProduct.ObtenerNombre()).isEmpty())
+                    {
+                        ok = true;
+                    }
+                if (QString::fromStdString(modifyProduct.ObtenerNombrePorCambiar()).isEmpty())
+                    {
+                        ok = true;
+                    }
+                if (modifyProduct.ObtenerExistencia()==0)
+                    {
+                        ok = true;
+                    }
+                if(ok){
+                    QMessageBox* msgbox = new QMessageBox(this);
+                    msgbox->setWindowTitle("Título del diálogo");
+                    msgbox->setText("Falta información");
+                    msgbox->open();
+                    return;
                 }
+                tienda->ModificarProductoTienda(modifyProduct.ObtenerID(),modifyProduct.ObtenerNombre(),modifyProduct.ObtenerExistencia());
+                QString productoLista = (QString::number(modifyProduct.ObtenerID())+" "+QString::fromStdString(modifyProduct.ObtenerNombre())+" "+QString::number(modifyProduct.ObtenerExistencia()));
+                    QList<QListWidgetItem *> list = ui->listaEditable->findItems(QString::fromStdString(modifyProduct.ObtenerNombrePorCambiar()), Qt::MatchContains);
+                    for ( QListWidgetItem *item : list ){
+                        item->setText(productoLista);
+                    }
 
-        } else {
+            } else {
+                QMessageBox* msgbox = new QMessageBox(this);
+                msgbox->setWindowTitle("Título del diálogo");
+                msgbox->setText("Cancelado");
+                msgbox->open();
+            }
+        }
+        catch (const ExcepcionProductoNoExiste& e)
+        {
             QMessageBox* msgbox = new QMessageBox(this);
             msgbox->setWindowTitle("Título del diálogo");
-            msgbox->setText("Cancelado");
+            msgbox->setText("El Producto no existe");
             msgbox->open();
+        }
+        catch (char const*message)
+        {
+                QMessageBox* msgbox = new QMessageBox(this);
+                msgbox->setWindowTitle("Título del diálogo");
+                msgbox->setText("Error");
+                msgbox->open();
         }
 }
 
@@ -115,6 +176,22 @@ void MainWindow::on_BotonEliminar_clicked()
     deleteProduct deleteProduct(this);
         int result = deleteProduct.exec();
         if (result == QDialog::Accepted) {
+            bool ok = false;
+            if (deleteProduct.ObtenerID()==0)
+                {
+                    ok = true;
+                }
+            if (QString::fromStdString(deleteProduct.ObtenerNombre()).isEmpty())
+                {
+                    ok = true;
+                }
+            if(ok){
+                QMessageBox* msgbox = new QMessageBox(this);
+                msgbox->setWindowTitle("Título del diálogo");
+                msgbox->setText("Falta información");
+                msgbox->open();
+                return;
+            }
             tienda->EliminarProductoTienda(deleteProduct.ObtenerID());
                 QList<QListWidgetItem *> list = ui->listaEditable->findItems(QString::fromStdString(deleteProduct.ObtenerNombre()), Qt::MatchContains);
                 for ( QListWidgetItem *item : list ){
@@ -127,22 +204,20 @@ void MainWindow::on_BotonEliminar_clicked()
             msgbox->setText("Cancelado");
             msgbox->open();
         }
-    }/*
+    }
     catch (const ExcepcionProductoNoExiste& e)
     {
         QMessageBox* msgbox = new QMessageBox(this);
         msgbox->setWindowTitle("Título del diálogo");
-        msgbox->setText("Error en la suma");
+        msgbox->setText("El Producto no existe");
         msgbox->open();
-    }*/
+    }
     catch (char const*message)
     {
             QMessageBox* msgbox = new QMessageBox(this);
             msgbox->setWindowTitle("Título del diálogo");
             msgbox->setText("Error");
             msgbox->open();
-
-            //this->ui->editResultado->setText("Error!");
     }
 
 }
@@ -202,11 +277,14 @@ void MainWindow::on_BotonCargarStream_clicked()
                         return;
                     }
 
+                    tienda->productos.clear();
+
                     tienda->CargarDesdeStreamBinario(&archivoEntrada);
                     this->ui->nombretienda->setText(QString::fromStdString(tienda->ObtenerNombreTienda()));
                     this->ui->direccionfisica->setText(QString::fromStdString(tienda->ObtenerDireccionFisica()));
                     this->ui->direccioninternet->setText(QString::fromStdString(tienda->ObtenerDireccionInternet()));
                     this->ui->telefono->setText(QString::fromStdString(tienda->ObtenerTelefono()));
+                    this->ui->listaEditable->clear();
 
                     for (Tarea3::Producto *producto : tienda->productos)
                     {

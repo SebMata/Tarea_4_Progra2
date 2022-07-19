@@ -18,6 +18,8 @@ public:
     std::string ObtenerNombre();
     int ObtenerExistencia();
 
+private slots:
+
 private:
     Ui::addProduct *ui;
 };

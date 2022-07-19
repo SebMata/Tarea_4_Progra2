@@ -1,5 +1,7 @@
 #include "addproduct.h"
 #include "ui_addproduct.h"
+#include <QFileDialog>
+#include <QMessageBox>
 
 addProduct::addProduct(QWidget *parent) :
     QDialog(parent),
@@ -33,5 +35,3 @@ int addProduct::ObtenerExistencia()
     int existencia = stringExistencia.toInt();
     return existencia;
 }
-
-
